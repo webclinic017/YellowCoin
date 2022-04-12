@@ -19,7 +19,7 @@ def login_user(request):
                 return redirect('trading:home')
             else:
                 print("New stack created for" + request.user.username)
-                newstack = stack(username=request.user, stocks={})
+                newstack = stack(username=request.user, stocks={"data": []})
                 newstack.save()
                 print(newstack)
                 return redirect('trading:home')
