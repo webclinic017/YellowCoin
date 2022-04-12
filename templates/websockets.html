@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>WebSockets</title>
+    </head>
+    <body>
+        <h5 id="app"></h5>
+        <button onclick="updater()">Update</button>
+        <script>
+            var socket = new WebSocket('ws://127.0.0.1:8000/ws/some_url/');
+            socket.onopen = function() {
+                console.log('open');
+            };
+            socket.onmessage = function(event) {
+                var data = JSON.parse(event.data);
+                console.log("Received: " + data.data1);
+                document.getElementById("app").innerHTML = "<table><tr>";
+                for(var i = 0; i < data.data.length; i++) {
+                    for (var key in data.data[i]) {
+                        document.getElementById("app").innerHTML +="<td>"+ data.data[i][key] + "&emsp;&emsp;&emsp;";        
+                    }
+                    document.getElementById("app").innerHTML += '<br><br>';
+                }
+            };
+            socket.onclose = function() {
+                console.log("Disconnected");
+            };
+            function updater()
+            {
+                socket.send("update");
+            }
+            
+        </script>
+    </body>
+</html>
