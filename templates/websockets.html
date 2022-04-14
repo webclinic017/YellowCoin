@@ -11,6 +11,7 @@
             {% for stock in stocks %}
             queryString += 'stock='+'{{ stock }}'+'&';
             {% endfor %}
+            queryString = queryString.slice(0, -1);
             var socket = new WebSocket('ws://'+window.location.host+'/ws/stock/trade/?'+queryString);
             console.log(queryString);
             socket.onmessage = function(event) {

@@ -10,5 +10,5 @@ def update_data(self, stocks):
     loop = asyncio.new_event_loop()
 
     asyncio.set_event_loop(loop)
-    loop.run_until_complete(channel_layer.group_send("trade", {"type": "send_stock_update", "text": temp,}))
+    loop.run_until_complete(channel_layer.group_send("stock_trade", {"type": "send_stock_update", "text": temp,}))
     return "done"
