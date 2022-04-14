@@ -14,11 +14,11 @@ app.conf.update(timezone = 'Asia/Kolkata')
 app.config_from_object(settings, namespace='CELERY')
 stocksA = ["INTC:NASDAQ","AAPL:NASDAQ","MSFT:NASDAQ","GOOG:NASDAQ","AMZN:NASDAQ","ITC:NSE","IDEA:NSE","YESBANK:NSE","BHEL:NSE","RELIANCE:NSE","TCS:NSE","HDFC:NSE","ICICIBANK:NSE","MARUTI:NSE","WIPRO:NSE"]
 app.conf.beat_schedule = {
-    'every-10-seconds': {
-        'task': 'trading.tasks.update_data',
-        'schedule': 10,
-        'args': (stocksA,)
-    }
+    # 'every-10-seconds': {
+    #     'task': 'trading.tasks.update_data',
+    #     'schedule': 10,
+    #     'args': (stocksA,)
+    # }
 }
 
 app.autodiscover_tasks()

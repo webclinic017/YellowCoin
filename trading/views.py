@@ -70,7 +70,8 @@ def home(request):
 
 
 def ws(request):
-    return render(request, 'websockets.html')
+    context = {'stocks' : stocks}
+    return render(request, 'websockets.html', context = context)
 
 @login_required
 def watchlist(request):

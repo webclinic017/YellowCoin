@@ -1,6 +1,6 @@
-from django.urls import path
-from trading.consumer import wsConsumer
+from django.urls import re_path
+from . import consumer
 
 ws_urlpatterns = [
-    path('ws/some_url/', wsConsumer.as_asgi()),
+    re_path(r'ws/stock/(?P<room_name>\w+)/$', consumer.StockConsumer.as_asgi()),
 ]
