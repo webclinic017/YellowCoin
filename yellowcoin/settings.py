@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-ky%4!!+cgc$56_n)ece3047&oh23w%k=$_q)z(hk&@ah_kult%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.0.109','127.0.0.1','lit-temple-67681.herokuapp.com']
+ALLOWED_HOSTS = ['192.168.0.109','127.0.0.1','yellowcoin.herokuapp.com/']
 
 # Application definition
 
@@ -80,12 +80,19 @@ ASGI_APPLICATION = 'yellowcoin.asgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'mydatabase',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'd5ev28tfh1i036',
+        'USER': 'znrkcxxytdrush',
+        'PORT': 5432,
+        'PASSWORD' : '8cee8084855b5e61ccf29698d2c2a709a3d45b5ba0392742b89940acc20bd46b',
+        'HOST': 'ec2-3-228-235-79.compute-1.amazonaws.com',
     }
-
 }
 '''
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'mydatabase',
+    },
 'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'yellowcoin',
@@ -147,22 +154,3 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# Celery settings
-CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
-CELERY_ACCEPT_CONTENT = ['application/json']
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'Asia/Kolkata'
-CELERY_RESULT_BACKEND = 'django-db'
-
-CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
-
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [("127.0.0.1", 6379)],
-        },
-    },
-}
