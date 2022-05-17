@@ -1,8 +1,8 @@
-from tempfile import tempdir
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from accounts.models import stack
+from .models import trades
 import requests
 from bs4 import BeautifulSoup
 import json
@@ -29,7 +29,7 @@ def thread_function(i,stocks):
         dataArr.append(data[j].text)
     dataArrFinal.append(dataArr)
     dataArr = []
-    print(stocks[i])
+    #print(stocks[i])
 
 def dataB(stocks):
     global dataArrFinal,threads
@@ -55,10 +55,13 @@ def data(stock):
     dataArr.append(stock)
     dataArr.append(price.text)
     for j in range(0,7):
-        dataArr.append(data[j].text)
+        try:
+            dataArr.append(data[j].text)
+        except:
+            pass
     dataArrFinal=dataArr
     dataArr = []
-    print(stock)
+    #print(stock)
     temp = dataArrFinal
     dataArrFinal=[]
     return temp
@@ -68,30 +71,37 @@ def home(request):
     current_user = request.user
     return render(request, 'home.html',{'current_user':current_user})
 
-
+@login_required
 def ws(request):
-    context = {'stocks' : stocks}
+    obj = stack.objects.filter(username=request.user).first()
+    context = {'stocks' : obj.stocks['data']}
+
     return render(request, 'websockets.html', context = context)
 
 @login_required
 def watchlist(request):
     obj = stack.objects.filter(username=request.user).first()
-    print(timezone.localtime())
     # obj.stocks = {"data": []}
     # obj.save()
     temp = dataB(obj.stocks["data"])
     temp.sort(key=lambda x:x[1])
     current_user = request.user
-    return render(request, 'watchlist.html',{'dataArrFinal':temp,'stocksA':stocksA,'current_user':current_user})
+    senty = [[],[]]
+    senty[0]= data("NIFTY_50:INDEXNSE")
+    senty[1]= data("SENSEX:INDEXBOM")
+    return render(request, 'trade_watchlist.html',{'dataArrFinal':temp,'stocksA':stocksA,'current_user':current_user,'senty':senty})
 
 @login_required
-def trades(request):
-    obj = stack.objects.filter(username=request.user).first()
-    print(timezone.localtime())
-    temp = dataB(obj.stocks["data"])
-    temp.sort(key=lambda x:x[1])
+def tradesFunction(request):
+    obj = trades.objects.filter(user_id=request.user).all()
     current_user = request.user
-    return render(request, 'trades.html',{'dataArrFinal':temp,'stocksA':stocksA,'current_user':current_user})
+    return render(request, 'trade_transcation.html',{'trades':obj,'current_user':current_user,'stocksA':stocksA,'dataArrFinal':dataArrFinal})
+
+@login_required
+def tradesRemove(request):
+    id = request.GET.get('id')
+    trades.objects.filter(id=id).delete()
+    return HttpResponse("success")
 
 
 @login_required
@@ -162,6 +172,7 @@ def dataDisplay(request):
                 userStack.save()
                 return HttpResponse(json.dumps(stringOutput,indent=4), content_type="application/json")
             except:
+                print("error")
                 return HttpResponse('Invalid Symbol', content_type="application/json")
         else:
             print(symbol)

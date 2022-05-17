@@ -6,7 +6,8 @@ app_name = 'trading'
 urlpatterns = [
     path('', views.home, name='home'),
     path('watchlist/', views.watchlist, name='watchlist'),
-    path('trades/', views.trades, name='trades'),
+    path('trades/', views.tradesFunction, name='tradesFunction'),
+    path('tradesRemove/', views.tradesRemove, name='tradesRemove'),
     path('data/', views.dataDisplay, name='dataDisplay'),
     path('websocket/', views.ws, name='ws'),
 ]

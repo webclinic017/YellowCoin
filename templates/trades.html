@@ -116,25 +116,25 @@
             <div class="flex flex-nowrap ">
                 <div class="grid grid-rows-2 grid-cols-1 ml-10 w-20">
                     <div class="grid grid-rows-1 grid-cols-2"> 
-                        <input type="checkbox" class="h-8 bg-gray-200 rounded-full ">
+                        <input type="radio"  value="pending" id="pendingOrder" name="box" class="h-8 bg-gray-200 rounded-full ">
                         <h1 class="text-[10px] my-1 ">Pending Order</h1>
                     </div>
                     <div class="grid grid-rows-1 grid-cols-2"> 
-                        <input type="checkbox" class="h-8 bg-gray-200 rounded-full ">
+                        <input type="radio" value="executed" id="executedOrder" name="box" class="h-8 bg-gray-200 rounded-full ">
                         <h1 class="text-[10px] my-1">Executed Order</h1>
                     </div>
                 </div>
                 <div class="grid grid-rows-2 grid-cols-1 ml-10">
                     <h1 class="text-[20px] mx-auto my-1">Trade After</h1>
-                    <input type="date" class="w-[90%] h-8 px-4 py-2 bg-gray-200 rounded-lg mx-auto ">
+                    <input type="date" id="after" class="w-[90%] h-8 px-4 py-2 bg-gray-200 rounded-lg mx-auto ">
                 </div>
                 <div class="grid grid-rows-2 grid-cols-1 ">
                     <h1 class="text-[20px] mx-auto my-1">Trade Before</h1>
-                    <input type="date" class="w-[90%] h-8 px-4 py-2 bg-gray-200 rounded-lg mx-auto ">
+                    <input type="date" id="before" class="w-[90%] h-8 px-4 py-2 bg-gray-200 rounded-lg mx-auto ">
                 </div>
                 <div class="grid grid-rows-2 grid-cols-1 ">
                     <h1 class="text-[20px] mx-auto my-1">Select Market</h1>
-                    <select class="w-[90%] h-8 px-4 py-1 bg-gray-200 rounded-lg mx-auto">
+                    <select id="market" class="w-[90%] h-8 px-4 py-1 bg-gray-200 rounded-lg mx-auto">
                         <option value="">Select Market</option>
                         <option value="NSEOPT">NSEOPT</option>
                         <option value="NSEFUT">NSEFUT</option>
@@ -144,7 +144,7 @@
                 </div>
                 <div class="grid grid-rows-2 grid-cols-1 ">
                     <h1 class="text-[20px] mx-auto my-1">Select Script</h1>
-                    <select class="w-[90%] h-8 px-4 py-1 bg-gray-200 rounded-lg mx-auto">
+                    <select id="script" class="w-[90%] h-8 px-4 py-1 bg-gray-200 rounded-lg mx-auto">
                         <option value="">Select </option>
                         <option value="Gold">Gold</option>
                         <option value="Silver">Silver</option>
@@ -154,7 +154,7 @@
                 </div>
                 <div class="grid grid-rows-2 grid-cols-1 ">
                     <h1 class="text-[20px] mx-auto my-1">Order Type</h1>
-                    <select class="w-[100%] h-8 px-4 py-1 bg-gray-200 rounded-lg mx-auto">
+                    <select id="type" class="w-[100%] h-8 px-4 py-1 bg-gray-200 rounded-lg mx-auto">
                         <option value="">Select Order Type</option>
                         <option value="Buy_Limit">Buy Limit</option>
                         <option value="Buy_Stop">Buy Stop</option>
@@ -171,10 +171,10 @@
         <div class="flex m-auto mt-2 ">
             <div class="mb-1 w-auto mx-auto ml-10 flex ">
                 <div class="my-auto ml-5">
-                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">Find Order</button>
+                    <button onclick="findOrder()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">Find Order</button>
                 </div>
                 <div class="my-auto ml-5">
-                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg mr-5">Clear Filter</button>
+                    <button onclick="clearFilter()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg mr-5">Clear Filter</button>
                 </div>
             </div>
             <div class="mb-1 w-auto mx-auto mr-10">
@@ -189,11 +189,11 @@
             </div>
         </div>
         <hr>
-        <div class="ml-[5vw] h-50 flex flex-col ">
+        <div class=" h-50 flex flex-col ">
             <div class="">
                 <div class="py-2 inline-block w-auto sm:px-6 lg:px-8">
-                <div class="m-auto">
-                    <table class="overflow-visible">
+                <div class="">
+                    <table class="overflow-hidden">
                     <thead class="border-b">
                         <tr>
                         <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-4 text-left">
@@ -230,23 +230,24 @@
                             O. time
                         </th>
                         <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-4 text-left">
-                            Modify
-                        </th>
-                        <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-4 text-left">
                             Cancel
                         </th>
                         </tr>
                     </thead>
                     <tbody id="table">
-                        {% for stock in dataArrFinal %}
+                        {% for trade in trades %}
                         <tr class="border-b">
-                        <td id="title" class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{stock.0}}</td>
-                        <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">{{stock.1}}</td>
-                        <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">{{stock.2}}</td>
-                        <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">{{stock.3}}</td>
-                        <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">{{stock.4}}</td>
-                        <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">{{stock.5}}</td>
-                        <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">{{stock.7}}</td>
+                        <td id="title" class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{trade.id}}</td>
+                        <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">{{trade.time}}</td>
+                        <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">{{trade.market}}</td>
+                        <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">{{trade.script}}</td>
+                        <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">{{trade.bs}}</td>
+                        <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">{{trade.orderType}}</td>
+                        <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">{{trade.lot}}</td>
+                        <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">{{trade.qty}}</td>
+                        <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">{{trade.orderPrice}}</td>
+                        <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">{{trade.status}}</td>
+                        <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">{{trade.oTime}}</td>
                         <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                             <button onclick="deleteR(this)" type="button" class="inline-block rounded-full bg-red-600 text-white leading-normal uppercase shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out w-9 h-9">
                                 X
@@ -273,43 +274,19 @@
                 dropdownButton.innerHTML = symbol + '<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="caret-down" class="w-2 ml-2" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"></path></svg>';
                 dropdown.classList.toggle('hidden');
             }
-            function add()
-            {
-                let symbol = dropdownButton.innerText;
-                dropdownButton.innerHTML = 'Stocks Companies'+ '<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="caret-down" class="w-2 ml-2" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"></path></svg>';
-                let fetchRes = fetch("./data?apiKey=qwertyuiop&todo=get&symbol=" + symbol);
-                fetchRes.then(res =>
-                    res.json()).then(d => {
-                        console.log(d)
-                        let table = document.getElementById('table');
-                        table.innerHTML+=`<tr class="border-b">
-                        <td id="title" class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">`+d['data'][0]['name']+`</td>
-                        <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">`+d['data'][0]['price']+`</td>
-                        <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">`+d['data'][0]['priviousClose']+`</td>
-                        <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">`+d['data'][0]['dayRange']+`</td>
-                        <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">`+d['data'][0]['yearRange']+`</td>
-                        <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">`+d['data'][0]['volume']+`</td>
-                        <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">`+d['data'][0]['dividentYield']+`</td>
-                        <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                            <button type="button" onclick="deleteR(this)" class="inline-block rounded-full bg-red-600 text-white leading-normal uppercase shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out w-9 h-9">
-                                X
-                            </button>
-                        </td>
-                        </tr>`
-                    })
-            }
             function deleteR(element)
             {
-                console.log("working");
-                let table = document.getElementById('table');
-                fetch("../data?apiKey=qwertyuiop&todo=delete&symbol="+ table.rows[element.parentNode.parentNode.rowIndex-1].cells[0].innerHTML, 
+                let text = "Are You sure you want to delete this Transcation?\nThis action cannot be undone.\nTranscation details : \n ID : "+element.parentNode.parentNode.childNodes[1].innerHTML + "\n Market : " + element.parentNode.parentNode.childNodes[5].innerHTML + "\n Script : " + element.parentNode.parentNode.childNodes[7].innerHTML + "\n Order Price : " + element.parentNode.parentNode.childNodes[19].innerHTML + "\n Quantity : " + element.parentNode.parentNode.childNodes[17].innerHTML + "\n Lot : " + element.parentNode.parentNode.childNodes[15].innerHTML + "\n Date : " + element.parentNode.parentNode.childNodes[3].innerHTML ;
+                if (confirm(text) == true) {
+                    let table = document.getElementById('table');
+                    table.deleteRow(element.parentNode.parentNode.rowIndex-1);
+                    fetch("../tradesRemove?"+"id="+element.parentNode.parentNode.childNodes[1].innerHTML,
                     res =>
                     res.json()
-                ).then((_res) => {
-                    console.log();
-                });
-                console.log(table.rows[element.parentNode.parentNode.rowIndex-1].cells[0].innerHTML);
-                table.deleteRow(element.parentNode.parentNode.rowIndex-1);
+                    ).then((_res) => {
+                        console.log();
+                    });
+                }
             }
 
             function filter() {
@@ -370,6 +347,99 @@
                 }
                 
             }
+        </script>
+        <script>
+        function filterOrder(id,input,count) {
+                var filter, table, tr, td, i, txtValue;
+                filter = input;
+                table = document.getElementById("table");
+                tr = table.getElementsByTagName("tr");
+                for (i = 0; i < tr.length; i++) {
+                    td = tr[i].getElementsByTagName("td")[id];
+                    console.log(td.innerHTML);
+                    if (td) {
+                    if(count==0)
+                    {
+                        if (td.innerHTML==filter) {
+                            tr[i].style.display = "";
+                        }
+                        else {
+                            tr[i].style.display = "none";
+                        }
+                    }
+                    else
+                    {
+                        if (td.innerHTML==filter) {
+                            tr[i].style.display = "";
+                        }
+                    }
+                    }
+                }
+            }
+        function findOrder()
+        {
+            var penOrder = document.getElementById("pendingOrder").value;
+            var executedOrder = document.getElementById("executedOrder").value;
+            var after = document.getElementById("after").value;
+            var before = document.getElementById("before").value;
+            var market = document.getElementById("market").value;
+            var script = document.getElementById("script").value;
+            var type = document.getElementById("type").value;
+            var count = 0;
+            if(document.getElementById("pendingOrder").checked==true)
+            {
+                var choose = penOrder;
+            }
+            else
+            {
+                var choose = executedOrder;
+            }
+            var arrInfo = [["choose",choose,9],["after",after,1],["before",before,1],["market",market,2],["script",script,3],["type",type,5]];
+            var arrInfoFinal = [];
+            for(var i=0;i<7;i++)
+            {
+                try
+                {
+                    if(arrInfo[i][1]!='')
+                    {
+                        arrInfoFinal.push(arrInfo[i]);
+                    }
+                }
+                catch(e)
+                {
+                    continue;
+                }
+            }
+
+            for(var i=0;i<arrInfoFinal.length;i++)
+            {
+                 filterOrder(arrInfoFinal[i][2],arrInfoFinal[i][1],count);
+                 count++;
+            }
+        }
+        function clearFilter()
+        {
+                var penOrder = document.getElementById("pendingOrder");
+                var executedOrder = document.getElementById("executedOrder");
+                var after = document.getElementById("after");
+                var before = document.getElementById("before");
+                var market = document.getElementById("market");
+                var script = document.getElementById("script");
+                var type = document.getElementById("type");
+                let table = document.getElementById("table");
+                let tr = table.getElementsByTagName("tr");
+                for (i = 0; i < tr.length; i++) {
+                   tr[i].style.display = "";
+                }
+                penOrder.checked=false;
+                executedOrder.checked=false;
+                after.value='';
+                before.value='';
+                market.value='';
+                script.value='';
+                type.value='';
+        }
+
         </script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
     </body>

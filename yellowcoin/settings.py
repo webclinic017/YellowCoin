@@ -25,13 +25,11 @@ SECRET_KEY = 'django-insecure-ky%4!!+cgc$56_n)ece3047&oh23w%k=$_q)z(hk&@ah_kult%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.0.120','127.0.0.1','lit-temple-67681.herokuapp.com']
+ALLOWED_HOSTS = ['192.168.0.109','127.0.0.1','lit-temple-67681.herokuapp.com']
 
 # Application definition
 
 INSTALLED_APPS = [
-    'accounts',
-    'trading',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -41,6 +39,8 @@ INSTALLED_APPS = [
     'channels',
     'django_celery_results',
     'django_celery_beat',
+    'accounts',
+    'trading',
 ]
 
 MIDDLEWARE = [
@@ -80,15 +80,29 @@ ASGI_APPLICATION = 'yellowcoin.asgi.application'
 
 DATABASES = {
     'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'mydatabase',
+    }
+
+}
+'''
+'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'yellowcoin',
+        'USER': 'postgres',
+        'PORT': 5432,
+        'PASSWORD' : 'admin',
+        'HOST': '127.0.0.1',
+    }
+
+default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'd1sakq95nathk',
         'USER': 'irzsczscjvpqbc',
         'PORT': 5432,
         'PASSWORD' : '7ffd9b3635eeb941757dac56ef0181bbecc6346025f560c36aad157b89f2d108',
         'HOST': 'ec2-34-207-12-160.compute-1.amazonaws.com',
-    }
-}
-
+    }'''
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
