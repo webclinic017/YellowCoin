@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-ky%4!!+cgc$56_n)ece3047&oh23w%k=$_q)z(hk&@ah_kult%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.0.109','127.0.0.1','yellowcoin.herokuapp.com']
+ALLOWED_HOSTS = ['192.168.0.109', '127.0.0.1', 'yellowcoin.herokuapp.com']
 
 # Application definition
 
@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'django_celery_beat',
     'accounts',
     'trading',
+    'dashboard',
+    'user',
 ]
 
 MIDDLEWARE = [
@@ -51,7 +53,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'yellowcoin.urls'
@@ -84,7 +85,7 @@ DATABASES = {
         'NAME': 'd5ev28tfh1i036',
         'USER': 'znrkcxxytdrush',
         'PORT': 5432,
-        'PASSWORD' : '8cee8084855b5e61ccf29698d2c2a709a3d45b5ba0392742b89940acc20bd46b',
+        'PASSWORD': '8cee8084855b5e61ccf29698d2c2a709a3d45b5ba0392742b89940acc20bd46b',
         'HOST': 'ec2-3-228-235-79.compute-1.amazonaws.com',
     }
 }
