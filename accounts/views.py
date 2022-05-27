@@ -35,3 +35,45 @@ def logout_user(request):
     logout(request)
     messages.success(request, ('You have been logged out!'))
     return redirect('accounts:login_user')
+
+
+@login_required
+def cash_ledge(request):
+    current_user = request.user
+    return render(request, 'account_ledge.html', {'current_user': current_user})
+
+
+@login_required
+def cash_entry(request):
+    current_user = request.user
+    return render(request, 'account_entry.html', {'current_user': current_user})
+
+
+@login_required
+def jv(request):
+    current_user = request.user
+    return render(request, 'account_jv.html', {'current_user': current_user})
+
+
+@login_required
+def jv_broker(request):
+    current_user = request.user
+    return render(request, 'account_jv_broker.html', {'current_user': current_user})
+
+
+@login_required
+def jv_broker_delete(request):
+    current_user = request.user
+    return render(request, 'account_jv_broker_delete.html', {'current_user': current_user})
+
+
+@login_required
+def deposit_entry(request):
+    current_user = request.user
+    return render(request, 'account_deposit.html', {'current_user': current_user})
+
+
+@login_required
+def valan(request):
+    current_user = request.user
+    return render(request, 'account_valan.html', {'current_user': current_user})
