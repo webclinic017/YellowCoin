@@ -81,11 +81,12 @@ def data(stock):
 
 @login_required
 def home(request):
-    current_user = request.user
+    """current_user = request.user
     if current_user.username == 'admin':
         return render(request, 'home.html', {'current_user': current_user})
     else:
-        return render(request, 'user_home.html', {'current_user': current_user})
+        return render(request, 'user_home.html', {'current_user': current_user})"""
+    return redirect('trading:watchlist')
 
 
 @login_required
