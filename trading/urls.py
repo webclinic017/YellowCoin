@@ -10,4 +10,5 @@ urlpatterns = [
     path('tradesRemove/', views.tradesRemove, name='tradesRemove'),
     path('data/', views.dataDisplay, name='dataDisplay'),
     path('websocket/', views.ws, name='ws'),
+    path('create_transcations/', views.Createtrades, name='Createtrades'),
 ]
