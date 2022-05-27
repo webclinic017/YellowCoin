@@ -136,7 +136,9 @@ def Createtrades(request):
         if stopLoss != None:
             stopLossPrice = request.POST.get('Loss_Price')
         if takeProfit != None:
-            takeProfitPrice = request.POST.get('takeProfit_Price')
+            takeProfitPrice = request.POST.get('Profit_Price')
+        print(symbol, type, amount, takeProfit,
+              stopLoss, stopLossPrice, takeProfitPrice)
         if takeProfitPrice == '' and stopLossPrice == '':
             order = api.submit_order(
                 symbol=symbol,
@@ -150,7 +152,7 @@ def Createtrades(request):
                 symbol=symbol,
                 qty=amount,
                 side=type,
-                type='limit',
+                type='market',
                 time_in_force='day',
                 take_profit=dict(
                     limit_price=takeProfitPrice,
@@ -165,7 +167,7 @@ def Createtrades(request):
                 symbol=symbol,
                 qty=amount,
                 side=type,
-                type='limit',
+                type='market',
                 time_in_force='day',
                 take_profit=dict(
                     limit_price=takeProfitPrice,
@@ -176,7 +178,7 @@ def Createtrades(request):
                 symbol=symbol,
                 qty=amount,
                 side=type,
-                type='limit',
+                type='market',
                 time_in_force='day',
                 stop_loss=dict(
                     stop_price=stopLossPrice,
