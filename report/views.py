@@ -5,8 +5,8 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def track_report(request):
+    current_user = request.user
     if current_user.is_superuser:
-        current_user = request.user
         return render(request, 'report_track.html', {'current_user': current_user})
 
 
@@ -30,13 +30,13 @@ def deposit_report(request):
 
 @login_required
 def trail_report(request):
+    current_user = request.user
     if current_user.is_superuser:
-        current_user = request.user
         return render(request, 'report_trail.html', {'current_user': current_user})
 
 
 @login_required
 def client_report(request):
+    current_user = request.user
     if current_user.is_superuser:
-        current_user = request.user
         return render(request, 'report_client.html', {'current_user': current_user})

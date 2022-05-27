@@ -13,22 +13,22 @@ def trade_edit(request):
 
 @login_required
 def user_log(request):
+    current_user = request.user
     if current_user.is_superuser:
-        current_user = request.user
         return render(request, 'log_user_log.html', {'current_user': current_user})
 
 
 @login_required
 def auto(request):
+    current_user = request.user
     if current_user.is_superuser:
-        current_user = request.user
         return render(request, 'log_auto.html', {'current_user': current_user})
 
 
 @login_required
 def cross_log(request):
+    current_user = request.user
     if current_user.is_superuser:
-        current_user = request.user
         return render(request, 'log_cross.html', {'current_user': current_user})
 
 

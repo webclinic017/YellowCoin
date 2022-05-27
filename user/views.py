@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 
 @login_required
 def adduser(request):
+    current_user = request.user
     if current_user.is_superuser:
         if (request.method == 'POST'):
             Username = request.POST.get('Username')
@@ -25,13 +26,12 @@ def adduser(request):
                                   Card_Type=Card_Type, Card_Number=Card_Number, Partnership=Partnership, Remarks=Remarks, user=newDefualtUser)
             newUser.save()
             print(newUser)
-        current_user = request.user
         return render(request, 'create_user.html', {'current_user': current_user})
 
 
 @login_required
 def user_list(request):
+    current_user = request.user
     if current_user.is_superuser:
-        current_user = request.user
         user_list = UserAccount.objects.all()
         return render(request, 'user_list.html', {'current_user': current_user, 'user_list': user_list})

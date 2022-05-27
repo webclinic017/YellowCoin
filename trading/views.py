@@ -126,6 +126,7 @@ def tradesFunction(request):
 
 @login_required
 def Createtrades(request):
+    current_user = request.user
     if current_user.is_superuser:
         if (request.method == 'POST'):
             symbol = request.POST.get('symbol')
@@ -140,7 +141,7 @@ def Createtrades(request):
             if takeProfit != None:
                 takeProfitPrice = request.POST.get('Profit_Price')
             print(symbol, type, amount, takeProfit,
-                stopLoss, stopLossPrice, takeProfitPrice)
+                  stopLoss, stopLossPrice, takeProfitPrice)
             if takeProfitPrice == '' and stopLossPrice == '':
                 order = api.submit_order(
                     symbol=symbol,
@@ -200,13 +201,12 @@ def Createtrades(request):
             orderPrice = data[0].o
             print("Order Price:", orderPrice)
             newTrade = trades(user_id=request.user, script=str(symbol),
-                            orderType=str(type), qty=int(amount), status=str(order.status), orderPrice=float(orderPrice), market="NASDAQ", bs=str(str(data[0].h)+'/'+str(data[0].l)), lot=int(1))
+                              orderType=str(type), qty=int(amount), status=str(order.status), orderPrice=float(orderPrice), market="NASDAQ", bs=str(str(data[0].h)+'/'+str(data[0].l)), lot=int(1))
             newTrade.save()
 
         obj = trades.objects.filter(user_id=request.user).all()
-        current_user = request.user
         stocksT = ['IPVI', 'IPVIU', 'IPW', 'CMBM', 'CMCA', 'PCOM', 'ARTEU',  'WAVD', 'DDI', 'PUI', 'PULM',
-                'VCYT', 'DEMZ', 'STNE', 'DENN', 'DERM', 'KLAC', 'KLAQ', 'WAVE',  'PAVM', 'IPSC', 'PAX', 'CGEN']
+                   'VCYT', 'DEMZ', 'STNE', 'DENN', 'DERM', 'KLAC', 'KLAQ', 'WAVE',  'PAVM', 'IPSC', 'PAX', 'CGEN']
         return render(request, 'user_create_transcations.html', {'trades': obj, 'current_user': current_user, 'stocks': stocksT})
 
 
