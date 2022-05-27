@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'trading',
     'dashboard',
     'user',
+    'log',
+    'report',
 ]
 
 MIDDLEWARE = [

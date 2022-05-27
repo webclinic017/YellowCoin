@@ -108,7 +108,7 @@ def watchlist(request):
     senty = [[], []]
     senty[0] = data("NIFTY_50:INDEXNSE")
     senty[1] = data("SENSEX:INDEXBOM")
-    if current_user.username == 'admin':
+    if current_user.is_superuser:
         return render(request, 'trade_watchlist.html', {'dataArrFinal': temp, 'stocksA': stocksA, 'current_user': current_user, 'senty': senty})
     else:
         return render(request, 'user_trade_watchlist.html', {'dataArrFinal': temp, 'stocksA': stocksA, 'current_user': current_user, 'senty': senty})
@@ -118,7 +118,7 @@ def watchlist(request):
 def tradesFunction(request):
     obj = trades.objects.filter(user_id=request.user).all()
     current_user = request.user
-    if current_user.username == 'admin':
+    if current_user.is_superuser:
         return render(request, 'trade_transcation.html', {'trades': obj, 'current_user': current_user, 'stocksA': stocksA, 'dataArrFinal': dataArrFinal})
     else:
         return render(request, 'user_trade_transcation.html', {'trades': obj, 'current_user': current_user, 'stocksA': stocksA, 'dataArrFinal': dataArrFinal})
@@ -126,87 +126,88 @@ def tradesFunction(request):
 
 @login_required
 def Createtrades(request):
-    if (request.method == 'POST'):
-        symbol = request.POST.get('symbol')
-        type = request.POST.get('type')
-        amount = request.POST.get('amount')
-        takeProfit = request.POST.get('takeProfit')
-        stopLoss = request.POST.get('stopLoss')
-        stopLossPrice = ''
-        takeProfitPrice = ''
-        if stopLoss != None:
-            stopLossPrice = request.POST.get('Loss_Price')
-        if takeProfit != None:
-            takeProfitPrice = request.POST.get('Profit_Price')
-        print(symbol, type, amount, takeProfit,
-              stopLoss, stopLossPrice, takeProfitPrice)
-        if takeProfitPrice == '' and stopLossPrice == '':
-            order = api.submit_order(
-                symbol=symbol,
-                qty=amount,
-                side=type,
-                type='market',
-                time_in_force='day',
-            )
-        elif(takeProfitPrice != '' and stopLossPrice != ''):
-            order = api.submit_order(
-                symbol=symbol,
-                qty=amount,
-                side=type,
-                type='market',
-                time_in_force='day',
-                take_profit=dict(
-                    limit_price=takeProfitPrice,
-                ),
-                stop_loss=dict(
-                    stop_price=stopLossPrice,
-                    limit_price=stopLossPrice,
+    if current_user.is_superuser:
+        if (request.method == 'POST'):
+            symbol = request.POST.get('symbol')
+            type = request.POST.get('type')
+            amount = request.POST.get('amount')
+            takeProfit = request.POST.get('takeProfit')
+            stopLoss = request.POST.get('stopLoss')
+            stopLossPrice = ''
+            takeProfitPrice = ''
+            if stopLoss != None:
+                stopLossPrice = request.POST.get('Loss_Price')
+            if takeProfit != None:
+                takeProfitPrice = request.POST.get('Profit_Price')
+            print(symbol, type, amount, takeProfit,
+                stopLoss, stopLossPrice, takeProfitPrice)
+            if takeProfitPrice == '' and stopLossPrice == '':
+                order = api.submit_order(
+                    symbol=symbol,
+                    qty=amount,
+                    side=type,
+                    type='market',
+                    time_in_force='day',
                 )
-            )
-        elif(takeProfitPrice != ''):
-            order = api.submit_order(
-                symbol=symbol,
-                qty=amount,
-                side=type,
-                type='market',
-                time_in_force='day',
-                take_profit=dict(
-                    limit_price=takeProfitPrice,
-                ),
-            )
-        elif(stopLossPrice != ''):
-            order = api.submit_order(
-                symbol=symbol,
-                qty=amount,
-                side=type,
-                type='market',
-                time_in_force='day',
-                stop_loss=dict(
-                    stop_price=stopLossPrice,
-                    limit_price=stopLossPrice,
+            elif(takeProfitPrice != '' and stopLossPrice != ''):
+                order = api.submit_order(
+                    symbol=symbol,
+                    qty=amount,
+                    side=type,
+                    type='market',
+                    time_in_force='day',
+                    take_profit=dict(
+                        limit_price=takeProfitPrice,
+                    ),
+                    stop_loss=dict(
+                        stop_price=stopLossPrice,
+                        limit_price=stopLossPrice,
+                    )
                 )
-            )
-        else:
-            pass
-        print("Order ID:", order.id)
-        print("Order Status:", order.status)
-        print("Order Qty:", order.qty)
-        print("Order Type:", order.type)
-        print("Order Symbol:", order.symbol)
-        print("buy price:", order.limit_price)
-        data = api.get_bars(symbol, TimeFrame.Hour, "2021-05-26",
-                            "2022-05-26",  limit=1)
-        orderPrice = data[0].o
-        print("Order Price:", orderPrice)
-        newTrade = trades(user_id=request.user, script=str(symbol),
-                          orderType=str(type), qty=int(amount), status=str(order.status), orderPrice=float(orderPrice), market="NASDAQ", bs=str(str(data[0].h)+'/'+str(data[0].l)), lot=int(1))
-        newTrade.save()
+            elif(takeProfitPrice != ''):
+                order = api.submit_order(
+                    symbol=symbol,
+                    qty=amount,
+                    side=type,
+                    type='market',
+                    time_in_force='day',
+                    take_profit=dict(
+                        limit_price=takeProfitPrice,
+                    ),
+                )
+            elif(stopLossPrice != ''):
+                order = api.submit_order(
+                    symbol=symbol,
+                    qty=amount,
+                    side=type,
+                    type='market',
+                    time_in_force='day',
+                    stop_loss=dict(
+                        stop_price=stopLossPrice,
+                        limit_price=stopLossPrice,
+                    )
+                )
+            else:
+                pass
+            print("Order ID:", order.id)
+            print("Order Status:", order.status)
+            print("Order Qty:", order.qty)
+            print("Order Type:", order.type)
+            print("Order Symbol:", order.symbol)
+            print("buy price:", order.limit_price)
+            data = api.get_bars(symbol, TimeFrame.Hour, "2021-05-26",
+                                "2022-05-26",  limit=1)
+            orderPrice = data[0].o
+            print("Order Price:", orderPrice)
+            newTrade = trades(user_id=request.user, script=str(symbol),
+                            orderType=str(type), qty=int(amount), status=str(order.status), orderPrice=float(orderPrice), market="NASDAQ", bs=str(str(data[0].h)+'/'+str(data[0].l)), lot=int(1))
+            newTrade.save()
 
-    obj = trades.objects.filter(user_id=request.user).all()
-    current_user = request.user
-    stocksT = ['IPVI', 'IPVIU', 'IPW', 'CMBM', 'CMCA', 'PCOM', 'ARTEU',  'WAVD', 'DDI', 'PUI', 'PULM',
-               'VCYT', 'DEMZ', 'STNE', 'DENN', 'DERM', 'KLAC', 'KLAQ', 'WAVE',  'PAVM', 'IPSC', 'PAX', 'CGEN']
-    return render(request, 'user_create_transcations.html', {'trades': obj, 'current_user': current_user, 'stocks': stocksT})
+        obj = trades.objects.filter(user_id=request.user).all()
+        current_user = request.user
+        stocksT = ['IPVI', 'IPVIU', 'IPW', 'CMBM', 'CMCA', 'PCOM', 'ARTEU',  'WAVD', 'DDI', 'PUI', 'PULM',
+                'VCYT', 'DEMZ', 'STNE', 'DENN', 'DERM', 'KLAC', 'KLAQ', 'WAVE',  'PAVM', 'IPSC', 'PAX', 'CGEN']
+        return render(request, 'user_create_transcations.html', {'trades': obj, 'current_user': current_user, 'stocks': stocksT})
 
 
 @login_required
