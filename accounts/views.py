@@ -16,19 +16,20 @@ def login_user(request):
             login(request, user)
             messages.success(request, ('You have been logged in!'))
             if stack.objects.filter(username=request.user).exists():
-                return redirect('trading:home')
+                return redirect('/dashboard')
             else:
                 print("New stack created for" + request.user.username)
                 newstack = stack(username=request.user, stocks={"data": []})
                 newstack.save()
                 print(newstack)
-                return redirect('trading:home')
+                return redirect('/dashboard')
         else:
             messages.success(request, ('Error logging in - please try again.'))
             return render(request, 'login.html')
     else:
         return render(request, 'login.html')
-    
+
+
 @login_required
 def logout_user(request):
     logout(request)
