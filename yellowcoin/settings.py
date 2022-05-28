@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'user',
     'log',
     'report',
+    'forex',
 ]
 
 MIDDLEWARE = [

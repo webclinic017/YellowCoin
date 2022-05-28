@@ -11,4 +11,7 @@ urlpatterns = [
     path('data/', views.dataDisplay, name='dataDisplay'),
     path('websocket/', views.ws, name='ws'),
     path('create_transcations/', views.Createtrades, name='Createtrades'),
+    path('portfolio/', views.trading_portfolio, name='trading_portfolio'),
+    path('ban/', views.trading_ban, name='trading_ban'),
+    path('margin/', views.trading_margin, name='trading_margin'),
 ]
